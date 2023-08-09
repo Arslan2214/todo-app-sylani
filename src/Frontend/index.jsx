@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../components/Card";
+import TaskForm from "../components/TaskForm";
 import {
   AppstoreOutlined,
   BarChartOutlined,
@@ -31,6 +32,7 @@ const items = [
 
 // Starting Main body of App
 const App = () => {
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -47,7 +49,7 @@ const App = () => {
           bottom: 0,
           background: colorBgContainer,
         }}
-        className="hidden sm:block"
+        className="hidden md:block"
       >
         <div className="demo-logo-vertical" />
         <Menu
@@ -63,7 +65,7 @@ const App = () => {
           style={{
             background: colorBgContainer,
           }}
-          className="sticky top-0 text-4xl shadow-sm text-center pt-3 font-railway"
+          className="sticky top-0 text-4xl select-none shadow-sm text-center pt-3 font-railway"
         >
           {" "}
           ToDo List{" "}
@@ -74,24 +76,15 @@ const App = () => {
             overflow: "initial",
           }}
         >
-          <div
-            style={{
-              textAlign: "center",
-            }}
-            className="bg-white p-6 md:p-[14px] min-h-[85vh]"
-          >
-            <Card
-              head="Social Works"
-              text="Lorem ipsum, dolor sit amet consectetur adipisicing elit. Inventore
-            vel, modi laudantium ratione consequatur impedit quo ipsa cum
-            blanditiis officia assumenda quod adipisci eos nulla ullam
-            accusamus, eveniet expedita praesentium rem iste vitae ad! Maiores,
-            laboriosam incidunt non reprehenderit quo odio accusantium nam
-            reiciendis quae temporibus obcaecati eos tempore. Omnis."
-            />
+          <div className="flex flex-wrap gap-6 bg-white p-6 md:p-8 min-h-[85vh]">
+            {
+              // Data from Firebase
+              <TaskForm />
+            }
+            <Card />
           </div>
         </Content>
-        <Footer className="text-center font-semibold text-gray-500 py-1 m-0">
+        <Footer className="text-center font-semibold select-none text-gray-500 py-1 m-0">
           All Rights Reserved ©2022 Created by: ARslan Ahmad.
         </Footer>
       </Layout>
