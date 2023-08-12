@@ -1,21 +1,23 @@
 import React from "react";
 import { Input, Form, DatePicker } from "antd";
 
-const { TextArea } = Input;
-
-function index() {
-    
+const index = () => {
+  // const [show, setShow] = useState(false);
+  // const useShow = () => setShow((pre) => !pre);
+  const show = false;
   return (
     <>
-      <div className="fixed p-20 text-center top-7 mx-auto h-[60vh] bg-gray-50 border rounded-xl z-10 w-[70%]">
-        <div className="flex my-4 gap-6 w-[80%] mx-auto">
-          <div className="w-[50%] ">
-            <Form.Item label="Title">
-              <Input placeholder="Title of Task" />
-            </Form.Item>
+      <dialog
+        className={`fixed p-2 
+        ${show ? "block" : "hidden"}
+         sm:p-6 lg:p-10 text-center left-[20%] sm:left-[40%] top-7 h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
+      >
+        <div className="my-4 space-y-3 lg:space-y-6 w-[80%] mx-auto">
+          <div className="w-full text-center">
+            <Input placeholder="Title of Task" />
           </div>
-          <div className="w-[50%]">
-            <Form.Item label="Task Date">
+          <div className="w-full">
+            <Form.Item className="text-mono" label="Task Completion Date">
               <DatePicker />
             </Form.Item>
           </div>
@@ -32,9 +34,11 @@ function index() {
             Add Task
           </button>
         </div>
-      </div>
+      </dialog>
     </>
   );
-}
+};
 
+// export { useShow };
 export default index;
+// export default index;

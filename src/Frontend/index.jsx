@@ -1,38 +1,14 @@
 import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
-import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  FormOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
 import { Layout, Menu, theme } from "antd";
+import Navbar from "../components/Navbar/Navbar";
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
-const items = [
-  FormOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
 
 // Starting Main body of App
 const App = () => {
-
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -42,24 +18,17 @@ const App = () => {
       <Sider
         style={{
           overflow: "auto",
-          height: "100vh",
           position: "fixed",
           left: 0,
           top: 0,
           bottom: 0,
           background: colorBgContainer,
         }}
-        className="hidden md:block"
+        className="hidden h-screen md:block shadow-sm border"
       >
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="light"
-          mode="inline"
-          defaultSelectedKeys={["4"]}
-          items={items}
-        />
+        <Navbar />
       </Sider>
-      {/* <button className="absolute mt-6 right-1">Text</button> */}
+      <button className="absolute mt-6 block sm:hidden left-1">Text</button>
       <Layout className="site-layout ml-0 md:ml-[200px]">
         <Header
           style={{
@@ -67,8 +36,7 @@ const App = () => {
           }}
           className="sticky top-0 text-4xl select-none shadow-sm text-center pt-3 font-railway"
         >
-          {" "}
-          ToDo List{" "}
+          ToDo List
         </Header>
         <Content
           style={{
@@ -79,9 +47,13 @@ const App = () => {
           <div className="flex flex-wrap gap-6 bg-white p-6 md:p-8 min-h-[85vh]">
             {
               // Data from Firebase
-              <TaskForm />
             }
-            <Card />
+            <TaskForm />
+            <Card
+              head="Work on Sylani Assignment of Web"
+              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex aut perferendis, quia expedita dolores reiciendis ad suscipit repellat atque enim, iste ut similique! Enim quidem, dicta ducimus ipsum iusto quo."
+            />
+            {/* <Card /> */}
           </div>
         </Content>
         <Footer className="text-center font-semibold select-none text-gray-500 py-1 m-0">
