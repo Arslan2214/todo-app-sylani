@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-// import { useShow } from '../TaskForm'
+// import { setShow } from "../TaskForm/index";
 
 // Card Component
 function Index({ head, text }) {
@@ -34,7 +34,7 @@ function Index({ head, text }) {
 
       {head && text && (
         <div
-          className={`relative group h-[330px] w-[350px] mx-auto sm:mx-0 py-5 px-5 rounded-md shadow-lg bg-${bg}-300/60`}
+          className={`relative group h-[330px] w-[350px] mx-auto md:mx-0 py-5 px-5 rounded-md shadow-lg bg-${bg}-300/60`}
         >
           {/* Menu Buttons */}
           <div
@@ -93,7 +93,7 @@ function Index({ head, text }) {
       <div
         data-title="Hello 1"
         className={`flex flex-col justify-center items-center cursor-pointer mx-auto mt-1 sm:mx-0 h-[320px] w-[80%] sm:w-[50%] md:w-[33%] lg:w-[23%] py-6 px-5 rounded-md shadow-lg bg-gray-100/60 active:shadow-md active:bg-gray-200/40 `}
-        // onClick={() => {useShow()}}
+        // onClick={setShow(prev => !prev)}
       >
         <PlusOutlined className="text-5xl text-gray-600" />
         <p className="text-xl mt-2 text-gray-500 font-semibold select-none">

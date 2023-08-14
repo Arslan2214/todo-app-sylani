@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input, Form, DatePicker } from "antd";
 
-const index = () => {
-  // const [show, setShow] = useState(false);
-  // const useShow = () => setShow((pre) => !pre);
-  const show = false;
+const Index = () => {
+const [show, setShow] = useState(false);
+
+  // const show = false;
   return (
     <>
       <dialog
@@ -39,6 +39,7 @@ const index = () => {
   );
 };
 
-// export { useShow };
-export default index;
+// export const useShow = () => setShow((pre) => !pre);
+
+export default Index;
 // export default index;

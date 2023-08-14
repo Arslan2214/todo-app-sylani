@@ -29,7 +29,7 @@ const App = () => {
         <Navbar />
       </Sider>
       <button className="absolute mt-6 block sm:hidden left-1">Text</button>
-      <Layout className="site-layout ml-0 md:ml-[200px]">
+      <Layout className="site-layout ml-0 md:ml-[200px]  backdrop:blur-lg">
         <Header
           style={{
             background: colorBgContainer,
