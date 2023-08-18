@@ -1,7 +1,8 @@
 import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
-import { Layout, Menu, theme } from "antd";
+import { Layout, theme } from "antd";
+// import Register_Form from '../Auth/Register_Form'
 import Navbar from "../components/Navbar/Navbar";
 
 // Some Constens
@@ -28,6 +29,9 @@ const App = () => {
       >
         <Navbar />
       </Sider>
+
+      {/* <Register_Form /> */}
+      
       <button className="absolute mt-6 block sm:hidden left-1">Text</button>
       <Layout className="site-layout ml-0 md:ml-[200px]  backdrop:blur-lg">
         <Header
