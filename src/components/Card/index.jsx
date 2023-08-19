@@ -1,10 +1,21 @@
-import React, { useState } from "react";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import React, { useEffect, useRef, useState } from "react";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 // import { setShow } from "../TaskForm/index";
 
 // Card Component
 function Index({ head, text }) {
   const [openMenu, setOpenMenu] = useState(false);
+  const menu = useRef(null)
+
+  // Adding Side Click Close Menu Functionality
+  useEffect(() => {
+    document.addEventListener("click", (e) => {
+      if (openMenu === true) {
+        // setOpenMenu(false);
+        console.log("Close Menu");
+      }
+    });
+  });
   const randomColor = () => {
     const colors = [
       "blue",
@@ -22,7 +33,7 @@ function Index({ head, text }) {
     ];
 
     let ind = Math.floor(Math.random() * colors.length);
-    console.log('Card color =>', colors[ind])
+    console.log("Card color =>", colors[ind]);
     return colors[ind];
   };
 
@@ -56,7 +67,7 @@ function Index({ head, text }) {
           {/* Menu Text */}
 
           {openMenu && (
-            <div className="absolute top-3 right-2 rounded-md bg-slate-50 w-[120px]">
+            <div ref={menu} className="absolute top-3 right-2 rounded-md bg-slate-50 w-[120px]">
               <ul>
                 <li
                   className="flex space-x-2 items-center text-slate-400 px-2 py-1 w-full h-[50%] cursor-pointer hover:text-slate-600 hover:rounded-t-md"
@@ -89,17 +100,6 @@ function Index({ head, text }) {
           </div>
         </div>
       )}
-
-      <div
-        data-title="Hello 1"
-        className={`flex flex-col justify-center items-center cursor-pointer mx-auto mt-1 sm:mx-0 h-[320px] w-[80%] sm:w-[50%] md:w-[33%] lg:w-[23%] py-6 px-5 rounded-md shadow-lg bg-gray-100/60 active:shadow-md active:bg-gray-200/40 `}
-        // onClick={setShow(prev => !prev)}
-      >
-        <PlusOutlined className="text-5xl text-gray-600" />
-        <p className="text-xl mt-2 text-gray-500 font-semibold select-none">
-          Add Task
-        </p>
-      </div>
     </>
   );
 }

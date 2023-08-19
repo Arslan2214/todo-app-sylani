@@ -1,9 +1,10 @@
+import Router  from './Frontend/Router';
 import './App.css';
-import Frontend from './Frontend'
+
 function App() {
   return (
     <>
-     <Frontend />
+     <Router />
     </>
   );
 }

@@ -1,23 +1,30 @@
 import React, { useState } from "react";
 import { Input, Form, DatePicker } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 
-const Index = () => {
-const [show, setShow] = useState(false);
-
+const Index = ({ show, setShow }) => {
   // const show = false;
   return (
     <>
       <dialog
         className={`fixed p-2 
         ${show ? "block" : "hidden"}
-         sm:p-6 lg:p-10 text-center left-[20%] sm:left-[40%] top-7 h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
+         sm:p-5 lg:p-8 text-center left-[20%] sm:left-[40%] top-7 h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
       >
+        {/* Close Button */}
+        <div
+          className="absolute -top-1 right-2 bg-sky-400 font-semibold text-slate-50 rounded-t-sm cursor-pointer rounded-b-xl border text-lg p-1"
+          onClick={() => setShow(false)}
+        >
+          <CloseOutlined />
+        </div>
+        {/* End Of Close Button */}
         <div className="my-4 space-y-3 lg:space-y-6 w-[80%] mx-auto">
           <div className="w-full text-center">
             <Input placeholder="Title of Task" />
           </div>
           <div className="w-full">
-            <Form.Item className="text-mono" label="Task Completion Date">
+            <Form.Item className="text-mono text-semibold " label="Task Completion Date">
               <DatePicker />
             </Form.Item>
           </div>
@@ -30,7 +37,9 @@ const [show, setShow] = useState(false);
           ></textarea>
         </div>
         <div className="text-center my-3">
-          <button className="py-3 px-8 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm">
+          <button className="py-3 px-8 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm"
+          onClick={() => console.log('Add Task Clicked')}
+          >
             Add Task
           </button>
         </div>
