@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
@@ -6,13 +6,15 @@ import { Layout, theme } from "antd";
 // import Register_Form from '../Auth/Register_Form'
 import Navbar from "../components/Navbar/Navbar";
 import { PlusOutlined } from "@ant-design/icons";
+import Sign_In_Form from '../Auth/Sign_In_Form'
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
 
 // Starting Main body of App
 const App = () => {
-  const [showAddTask,  setShowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -30,7 +32,7 @@ const App = () => {
         }}
         className="hidden h-screen md:block shadow-sm border"
       >
-        <Navbar />
+        <Navbar setShow={setShowSignIn} />
       </Sider>
 
       {/* <Register_Form /> */}
@@ -52,7 +54,7 @@ const App = () => {
           }}
         >
           <div className="flex flex-wrap gap-6 bg-white p-6 md:p-8 min-h-[85vh]">
-            <TaskForm show={showAddTask} setShow={setShowAddTask}  />
+            <TaskForm show={showAddTask} setShow={setShowAddTask} />
             {
               // Data from Firebase
               <Card
@@ -77,6 +79,12 @@ const App = () => {
             {/* Endong of Button */}
           </div>
         </Content>
+        {/* Sign In Form */}
+        {
+          showSignIn &&
+          <Sign_In_Form setShow={setShowSignIn} />
+        }
+        {/* End of Sign In Form */}
         <Footer className="text-center font-semibold select-none text-gray-500 py-1 m-0">
           All Rights Reserved ©2022 Created by: ARslan Ahmad.
         </Footer>

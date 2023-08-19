@@ -6,8 +6,9 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-function Navbar() {
+function Navbar({setShow}) {
   const isAuth = false;
 
   const list1 = [
@@ -81,18 +82,18 @@ function Navbar() {
             <div className="flex flex-col justify-center space-y-1 items-center">
               <div
                 className="cursor-pointer w-[70%] select-none px-4"
-                onClick={() => console.log("Sign In Clicked ...")}
+                onClick={() => setShow(true)}
               >
                 <p className="text-center text-lg shadow hover:shadow-md active:shadow-sm text-slate-800 border rounded-md py-2 hover bg-slate-50 hover:bg-slate-200">
                   Sign In
                 </p>
               </div>
-              <p
-                className="underline text-sky-700"
-                onClick={() => console.log("Register Clicked ...")}
+              <NavLink
+                to="/register"
+                className="underline text-sky-700 cursor-pointer"
               >
-                <a href="#">Regester Now</a>
-              </p>
+                Regester Now
+              </NavLink>
             </div>
           )}
         </div>
