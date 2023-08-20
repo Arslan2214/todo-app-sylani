@@ -3,13 +3,13 @@ import { Input, Form, DatePicker } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 
 const Index = ({ show, setShow }) => {
-  // const show = false;
+  // setShow(true);
   return (
-    <>
+    <div className="absolute top-0 left-0 flex justify-center w-screen">
       <dialog
-        className={`fixed p-2 
+        className={`relative p-2 
         ${show ? "block" : "hidden"}
-         sm:p-5 lg:p-8 text-center left-[20%] sm:left-[40%] top-7 h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
+         sm:p-5 lg:p-8 text-center h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
       >
         {/* Close Button */}
         <div
@@ -24,7 +24,10 @@ const Index = ({ show, setShow }) => {
             <Input placeholder="Title of Task" />
           </div>
           <div className="w-full">
-            <Form.Item className="text-mono text-semibold " label="Task Completion Date">
+            <Form.Item
+              className="text-mono text-semibold "
+              label="Task Completion Date"
+            >
               <DatePicker />
             </Form.Item>
           </div>
@@ -37,14 +40,18 @@ const Index = ({ show, setShow }) => {
           ></textarea>
         </div>
         <div className="text-center my-3">
-          <button className="py-3 px-8 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm"
-          onClick={() => console.log('Add Task Clicked')}
+          <button
+            className="py-3 px-8 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm"
+            onClick={() => {
+              console.log("Add Task Clicked");
+              setShow(false);
+            }}
           >
             Add Task
           </button>
         </div>
       </dialog>
-    </>
+    </div>
   );
 };
 

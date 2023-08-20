@@ -1,17 +1,36 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
 import React, { useState } from "react";
+import { Toast } from "../../Global/Tostify";
 
 function Index({ setShow }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const center = Math.round(window.innerWidth / 2) + "px";
-  console.log(center);
 
+  const Initial = {
+    email: "",
+    password: "",
+  }
   // Firebase Code : For Sign-In
+  const [user, setUser] = useState(Initial);
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    Toast({
+      type: "success",
+      content: "Sign In, Successfully",
+    })
+    console.log(user);
+    setShow(false);
+    setUser(Initial);
+  }
+  
   return (
-    <>
+    <div className="flex justify-center pt-[25px] w-full h-full fixed top-0 left-0">
       <div
-        className={`absolute w-[25%] min-w-[230px] h-[34vh] top-6 left-[22%] sm:left-[30%] md:left-[40%] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
+        className={`relative w-[25%] min-w-[230px] h-[34vh] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
       >
         {/* Close Button */}
         <div
@@ -25,11 +44,14 @@ function Index({ setShow }) {
           <p className="text-4xl font-sans text-slate-600">LogIn</p>
         </div>
         <div className="my-6">
-          <Input placeholder="Enter Email ..." />
+          <Input onChange={handleInput} value={user.email} name="email" placeholder="Enter Email ..." />
         </div>
         <Space direction="horizontal" />
         <div className="my-6">
           <Input.Password
+          onChange={handleInput}
+          name="password"
+          value={user.password}
             placeholder="Password"
             visibilityToggle={{
               visible: passwordVisible,
@@ -38,12 +60,14 @@ function Index({ setShow }) {
           />
         </div>
         <div className="my-6">
-          <button className="py-2 px-7 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm">
+          <button
+          onClick={handleSubmit}
+          className="py-2 px-7 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm">
             Log In
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
