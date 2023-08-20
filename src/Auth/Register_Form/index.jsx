@@ -1,7 +1,7 @@
 import { Input, Space } from "antd";
 import React, { useRef, useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../Global/Firebase";
+import { auth } from "../../Global/Firebase";
 import { Toast, ToastContainer } from "../../Global/Tostify";
 
 function Index() {
@@ -29,8 +29,8 @@ function Index() {
     event.preventDefault();
     // All Empty Validation
     if (
-      user.firstName.length < 1 ||
-      user.email.length < 1 ||
+      user.firstName.length < 1 &&
+      user.email.length < 1 &&
       user.password.length < 1
     ) {
       Toast({
@@ -80,24 +80,28 @@ function Index() {
       return;
     }
 
-    // createUserWithEmailAndPassword(app, user.email, user.password)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // ..
-    //   });
+    // Firebase User Registeration
+    createUserWithEmailAndPassword(auth, user.email, user.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+        Toast({
+          type: "success",
+          content: "New User Added, Successfully",
+        });
+        // ...
+      })
+      .catch((error) => {
+        console.log(error.code);
+        Toast({
+          type: "error",
+          content: error.message,
+        })
+        // ..
+      });
 
-    Toast({
-      type: "success",
-      content: "New User Added, Successfully",
-    });
 
-    console.log(user);
     setUser(Initial);
   };
 

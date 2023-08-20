@@ -6,7 +6,8 @@ import { Layout, theme } from "antd";
 // import Register_Form from '../Auth/Register_Form'
 import Navbar from "../components/Navbar/Navbar";
 import { PlusOutlined } from "@ant-design/icons";
-import Sign_In_Form from '../Auth/Sign_In_Form'
+import Sign_In_Form from "../Auth/Sign_In_Form";
+import { ToastContainer } from 'react-toastify'
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
@@ -78,12 +79,11 @@ const App = () => {
             </div>
             {/* Endong of Button */}
           </div>
+          {/* Toast Container */}
+          <ToastContainer />
         </Content>
         {/* Sign In Form */}
-        {
-          showSignIn &&
-          <Sign_In_Form setShow={setShowSignIn} />
-        }
+        {showSignIn && <Sign_In_Form setShow={setShowSignIn} />}
         {/* End of Sign In Form */}
         <Footer className="text-center font-semibold select-none text-gray-500 py-1 m-0">
           All Rights Reserved ©2022 Created by: ARslan Ahmad.
