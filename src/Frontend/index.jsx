@@ -7,20 +7,19 @@ import { Layout, theme } from "antd";
 import Navbar from "../components/Navbar/Navbar";
 import { PlusOutlined } from "@ant-design/icons";
 import Sign_In_Form from "../Auth/Sign_In_Form";
-import { ToastContainer } from 'react-toastify'
+import { ToastContainer } from "react-toastify";
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
 
 // Starting Main body of App
 const App = () => {
+  const [tasks, setTasks] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  
 
   return (
     <Layout hasSider>
@@ -60,10 +59,14 @@ const App = () => {
             <TaskForm show={showAddTask} setShow={setShowAddTask} />
             {
               // Data from Firebase
-              <Card
-                head="Work on Sylani Assignment of Web"
-                text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex aut perferendis, quia expedita dolores reiciendis ad suscipit repellat atque enim, iste ut similique! Enim quidem, dicta ducimus ipsum iusto quo."
-              />
+              // tasks.map((task) => {
+                // return (
+                  <Card
+                    head="Work on Sylani Assignment of Web"
+                    text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex aut perferendis, quia expedita dolores reiciendis ad suscipit repellat atque enim, iste ut similique! Enim quidem, dicta ducimus ipsum iusto quo."
+                  />
+                // );
+              // })
             }
             {/* End Of Card  */}
             {/* Add New Task Button */}
