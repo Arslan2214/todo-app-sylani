@@ -1,8 +1,39 @@
 import React, { useState } from "react";
 import { Input, Form, DatePicker } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
+import { collection, addDoc } from "firebase/firestore";
 
 const Index = ({ show, setShow }) => {
+  const initial_todo = {
+    title: "",
+    todo_date: "",
+    text: "",
+  };
+  const [todo, setTodo] = useState(initial_todo);
+
+  const handelChange = (e) => {
+    // console.log(e.target  )
+    const { name, value } = e.target;
+    console.log('name =>', name )
+    console.log('value =>', value )
+    setTodo({ ...todo, [name]: value });  
+  };
+
+  const addTodo = async () => {
+    // e.preventDefault();
+    console.log(todo);
+
+    // try {
+    //   const docRef = await addDoc(collection(db, "users"), {
+    //     first: "Ada",
+    //     last: "Lovelace",
+    //     born: 1815,
+    //   });
+    //   console.log("Document written with ID: ", docRef.id);
+    // } catch (e) {
+    //   console.error("Error adding document: ", e);
+    // }
+  };
   // setShow(true);
   return (
     <div className="absolute top-0 left-0 flex justify-center w-screen">
@@ -21,30 +52,46 @@ const Index = ({ show, setShow }) => {
         {/* End Of Close Button */}
         <div className="my-4 space-y-3 lg:space-y-6 w-[80%] mx-auto">
           <div className="w-full text-center">
-            <Input placeholder="Title of Task" />
+            <Input
+              onChange={handelChange}
+              value={todo.title}
+              name="title"
+              // value={todo.title}
+              placeholder="Title of Task"
+            />
           </div>
           <div className="w-full">
-            <Form.Item
+
+            <label
               className="text-mono text-semibold "
-              label="Task Completion Date"
-            >
-              <DatePicker />
-            </Form.Item>
+              >
+              Task Completion Date
+              </label>
+              <input
+              className="border px-2 py-1 rounded-md focus:outline outline-sky-300"
+              type="date"
+                name="todo_date"
+                onChange={handelChange}
+                value={todo.todo_date}
+                placeholder="Select Date"
+              />
           </div>
         </div>
         <div className="text-center my-3">
           <textarea
+            onChange={handelChange}
+            value={todo.text}
+            name="text"
+            // value={todo.text}
             className="p-2 resize-none bg-white shadow outline-none border-none text-gray-400 h-[120px]  w-[80%]"
             placeholder="Enter Text ..."
-            name="text"
           ></textarea>
         </div>
         <div className="text-center my-3">
           <button
             className="py-3 px-8 font-semibold text-md bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm"
             onClick={() => {
-              console.log("Add Task Clicked");
-              setShow(false);
+              addTodo();
             }}
           >
             Add Task
