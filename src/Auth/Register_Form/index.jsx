@@ -1,5 +1,6 @@
 import { Input, Space } from "antd";
 import React, { useRef, useState } from "react";
+import { Link } from 'react-router-dom'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Global/Firebase";
 import { Toast, ToastContainer } from "../../Global/Tostify";
@@ -108,7 +109,7 @@ function Index() {
   return (
     <>
       <div className="flex justify-center items-center h-[100vh] w-[100vw]">
-        <div className="w-[38%] min-w-[260px] h-[35vh] min-h-[410px] text-center z-30 rounded-md border-2 shadow-xl py-6 px-3 bg-slate-100">
+        <div className="w-[38%] min-w-[260px] h-[37vh] min-h-[430px] text-center z-30 rounded-md border-2 shadow-xl py-6 px-3 bg-slate-100">
           <div>
             <p className="text-4xl font-sans text-slate-600">Register </p>
             <p className="text-md font-sans text-slate-400 mt-1">
@@ -157,7 +158,7 @@ function Index() {
               }}
             />
           </div>
-          <div className="my-3 md:my-6">
+          <div className="my-3 md:mt-4 md:mb-2">
             <Input.Password
               name="confirmPassword"
               onChange={handelChange}
@@ -169,7 +170,16 @@ function Index() {
               }}
             />
           </div>
-          <div className="my-3 md:my-6">
+          <p className="text-center">
+            Let's{" "}
+            <Link
+              to="/login"
+              className="text-sky-500 hover:underline cursor-pointer"
+            >
+              Sign In
+            </Link>
+          </p>
+          <div className="my-3 md:my-3">
             <button
               className="py-2 md:py-3 px-5 md:px-7 font-semibold text-md sm:text-[16px] bg-sky-400 text-white rounded-sm shadow-lg hover:bg-sky-500 transition-all duration-300 ease-in-out active:shadow-sm"
               onClick={handelSubmit}

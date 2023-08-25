@@ -105,9 +105,34 @@ function Navbar({ setTodos }) {
   const signOut = () => {
     setIsAuth(false);
   };
-  const handelChange = e =>{
-    console.log(e.target)
-  }
+
+  // Search Function
+  const handelChange = (e) => {
+    const inputValue = e.target.value.trim(); // Remove leading and trailing whitespace
+
+    if (inputValue === "") {
+      setTodos(JSON.parse(localStorage.getItem("todo")));
+      return;
+    }
+
+    const todos = JSON.parse(localStorage.getItem("todo"));
+
+    const newTodos = todos.filter((ele) => {
+      // Split input value and todo title into words
+      const inputWords = inputValue.toLowerCase().split(" ");
+      const todoTitleWords = ele.title.toLowerCase().split(" ");
+
+      // Check if any word in todo title matches any word in input value
+      return inputWords.some((inputWord) =>
+        todoTitleWords.some((todoTitleWord) =>
+          todoTitleWord.includes(inputWord)
+        )
+      );
+    });
+
+    setTodos(newTodos);
+  };
+
 
   return (
     <>

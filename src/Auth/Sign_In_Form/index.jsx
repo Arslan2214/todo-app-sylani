@@ -4,8 +4,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Global/Firebase";
 import { Toast } from "../../Global/Tostify";
 import { AuthContext } from "../../App";
-import { Navigate } from "react-router-dom";
-import { ToastContainer } from '../../Global/Tostify'
+import { Link } from "react-router-dom";
+import { ToastContainer } from "../../Global/Tostify";
 
 function Index() {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -117,12 +117,12 @@ function Index() {
         <div>
           <p className="select-none">
             Don't have an account?{" "}
-            <span
+            <Link
               className="text-sky-500 hover:underline cursor-pointer"
-              onClick={() => <Navigate to="/register" />}
+              to="/register"
             >
               Register Now
-            </span>
+            </Link>
           </p>
         </div>
         <div className="my-6">
