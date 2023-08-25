@@ -1,14 +1,19 @@
-import { CloseOutlined } from "@ant-design/icons";
 import { Input, Space } from "antd";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Global/Firebase";
 import { Toast } from "../../Global/Tostify";
+import { AuthContext } from "../../App";
+import { Navigate } from "react-router-dom";
+import { ToastContainer } from '../../Global/Tostify'
 
-function Index({ setShow }) {
+function Index() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const email = useRef(null);
   const password = useRef(null);
+
+  const [isAuth, setIsAuth] = useContext(AuthContext);
+  console.log(isAuth);
 
   const Initial = {
     email: "",
@@ -71,23 +76,17 @@ function Index({ setShow }) {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
-    setShow(false);
+    setIsAuth(true);
+    // Reset Input Field
     setUser(Initial);
   };
   // navigate to '/'
 
   return (
-    <div className="flex justify-center pt-[25px] w-full h-full fixed top-0 left-0">
+    <div className="flex justify-center items-center pt-[25px] w-screen h-screen">
       <div
         className={`relative w-[25%] min-w-[230px] h-[39vh] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
       >
-        {/* Close Button */}
-        <div
-          className="absolute -top-1 right-2 bg-sky-400 font-semibold text-slate-50 rounded-t-sm cursor-pointer rounded-b-xl border text-lg p-1"
-          onClick={() => setShow(false)}
-        >
-          <CloseOutlined />
-        </div>
         {/* End Of Close Button */}
         <div>
           <p className="text-4xl font-sans text-slate-600">LogIn</p>
@@ -115,6 +114,17 @@ function Index({ setShow }) {
             }}
           />
         </div>
+        <div>
+          <p className="select-none">
+            Don't have an account?{" "}
+            <span
+              className="text-sky-500 hover:underline cursor-pointer"
+              onClick={() => <Navigate to="/register" />}
+            >
+              Register Now
+            </span>
+          </p>
+        </div>
         <div className="my-6">
           <button
             onClick={handleSubmit}
@@ -124,6 +134,8 @@ function Index({ setShow }) {
           </button>
         </div>
       </div>
+      {/* Toast Container */}
+      <ToastContainer />
     </div>
   );
 }

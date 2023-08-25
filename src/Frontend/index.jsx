@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
@@ -15,11 +15,21 @@ const { Header, Content, Footer, Sider } = Layout;
 // Starting Main body of App
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  useEffect(() => {
+    if (localStorage.getItem("todo")) {
+      setTodos(JSON.parse(localStorage.getItem("todo")));
+      console.log('If is Running')
+    }
+    console.log('useEffect is Running ...')
+    console.log("Todos =>", localStorage.getItem("todo"));
+  }, [localStorage.getItem("todo")]);
 
   return (
     <Layout hasSider>
@@ -34,19 +44,16 @@ const App = () => {
         }}
         className="hidden h-screen md:block shadow-sm border"
       >
-        <Navbar setShow={setShowSignIn} />
+        <Navbar setShow={setShowSignIn} setTodos={setTodos} />
       </Sider>
 
       {/* <Register_Form /> */}
 
-      <button className="absolute mt-6 block sm:hidden left-1">Text</button>
-      <Layout className="site-layout ml-0 md:ml-[200px]  backdrop:blur-lg">
-        <Header
-          style={{
-            background: colorBgContainer,
-          }}
-          className="sticky top-0 text-4xl select-none shadow-sm text-center pt-3 font-railway"
-        >
+      <button className="absolute mt-6 block sm:hidden left-1 font-bold">
+        &gt;
+      </button>
+      <Layout className="site-layout ml-0 md:ml-[200px]">
+        <Header className="sticky top-0 bg-[white] text-4xl select-none shadow-lg text-center pt-3 font-railway">
           ToDo List
         </Header>
         <Content
@@ -60,20 +67,25 @@ const App = () => {
             {
               // Data from Firebase
               // tasks.map((task) => {
-                // return (
+              // return (
+              todos.map((todo) => {
+                return (
                   <Card
-                    head="Work on Sylani Assignment of Web"
-                    text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex aut perferendis, quia expedita dolores reiciendis ad suscipit repellat atque enim, iste ut similique! Enim quidem, dicta ducimus ipsum iusto quo."
+                    head={todo.title}
+                    text={todo.text}
+                    date={todo.todo_date}
                   />
-                // );
+                );
+              })
+              // );
               // })
             }
             {/* End Of Card  */}
             {/* Add New Task Button */}
-            <div className="flex justify-center items-center h-[330px]">
+            <div className="flex justify-center items-center w-[350px] sm:w-[48%] lg:w-[30%] h-[330px]">
               <div
                 data-title="Hello 1"
-                className={`flex flex-col justify-center items-center cursor-pointer aspect-square max-h-[150px] w-[180px] py-6 px-5 rounded-md shadow-lg bg-gray-100/60 active:shadow-md active:bg-gray-200/40 `}
+                className={`flex flex-col justify-center items-center cursor-pointer aspect-square max-h-[150px] w-full py-6 px-5 rounded-md shadow-lg bg-gray-100/60 active:shadow-md active:bg-gray-200/40 `}
                 onClick={() => setShowAddTask(true)}
               >
                 <PlusOutlined className="text-5xl text-gray-600" />

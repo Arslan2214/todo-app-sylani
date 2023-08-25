@@ -5,22 +5,110 @@ import {
   SearchOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { AuthContext } from "../../App";
 
-function Navbar({setShow}) {
-  const isAuth = false;
-
+function Navbar({ setTodos }) {
+  const [isAuth, setIsAuth] = useContext(AuthContext);
+  // Task List
   const list1 = [
-    { text: "Upcoming", icon: <DoubleRightOutlined /> },
-    { text: "Today", icon: <UnorderedListOutlined /> },
-    { text: "Todo List", icon: <MenuFoldOutlined /> },
+    {
+      text: "Upcoming",
+      icon: <DoubleRightOutlined />,
+      fun: () => UpcomingTodos(),
+    },
+    {
+      text: "Today",
+      icon: <UnorderedListOutlined />,
+      fun: () => todaytodos(),
+    },
+    {
+      text: "Todo List",
+      icon: <MenuFoldOutlined />,
+      fun: () => fullTodosList(),
+    },
   ];
+
+  const upcomingTodosCount = () => {
+    return JSON.parse(localStorage.getItem("todo")).filter((ele) => {
+      if (new Date(ele.todo_date).getTime() > new Date().getTime()) {
+        return ele;
+      }
+    }).length;
+  };
+  const todayTodosCount = () => {
+    const todos = JSON.parse(localStorage.getItem("todo")) || []; // Handle possible null value
+    const currentDate = new Date();
+
+    const todayTodos = todos.filter((ele) => {
+      const todoDate = new Date(ele.todo_date);
+      return (
+        todoDate.getFullYear() === currentDate.getFullYear() &&
+        todoDate.getMonth() === currentDate.getMonth() &&
+        todoDate.getDate() === currentDate.getDate()
+      );
+    });
+
+    return todayTodos.length;
+  };
+
+  // Collection List
   const collect = [
-    { text: "Upcoming", ntf: 12, clr: "#6ee7b7" },
-    { text: "Today", ntf: 11, clr: "#67e8f9" },
-    { text: "Todo List", ntf: 3, clr: "#fda4af" },
+    {
+      text: "Upcoming",
+      ntf: upcomingTodosCount() || 0,
+      clr: "#6ee7b7",
+    },
+    { text: "Today", ntf: todayTodosCount() || 0, clr: "#67e8f9" },
+    {
+      text: "Todo List",
+      ntf: JSON.parse(localStorage.getItem("todo")).length || 0,
+      clr: "#fda4af",
+    },
   ];
+
+  // Upcoming Todos
+  const UpcomingTodos = () => {
+    const todos = JSON.parse(localStorage.getItem("todo"));
+    const currentDate = new Date().getTime();
+
+    const newTodos = todos.filter((ele) => {
+      const todo_date = new Date(ele.todo_date).getTime();
+      if (todo_date > currentDate) {
+        return ele;
+      }
+    });
+    setTodos(newTodos);
+  };
+
+  // Today's Todos
+  const todaytodos = () => {
+    const todos = JSON.parse(localStorage.getItem("todo")) || []; // Handle possible null value
+    const currentDate = new Date();
+
+    const todayTodos = todos.filter((ele) => {
+      const todoDate = new Date(ele.todo_date);
+      return (
+        todoDate.getFullYear() === currentDate.getFullYear() &&
+        todoDate.getMonth() === currentDate.getMonth() &&
+        todoDate.getDate() === currentDate.getDate()
+      );
+    });
+
+    setTodos(todayTodos);
+  };
+
+  // All Todos
+  const fullTodosList = () => {
+    setTodos(JSON.parse(localStorage.getItem("todo")));
+  };
+  const signOut = () => {
+    setIsAuth(false);
+  };
+  const handelChange = e =>{
+    console.log(e.target)
+  }
+
   return (
     <>
       <nav className="flex flex-col justify-between pt-3 px-2 m-1 bg-slate-100/40 h-[98vh] rounded-lg">
@@ -36,66 +124,30 @@ function Navbar({setShow}) {
               </span>
               <input
                 type="text"
+                onChange={handelChange}
                 placeholder="Search"
                 className="w-full p-2 bg-transparent rounded-md outline-none border-none border-r-2 border-t-2 border-b-2"
               />
             </div>
           </div>
-          {/* Menu List */}
+          {/* ---------------- Menu List ---------------- */}
           <div className="my-4">
             <List tit="Tasks" list={list1} />
           </div>
-          {/* Collection List */}
+          {/* ---------------- Collection List ---------------- */}
           <div>
             <Collection head="List" collect={collect} />
           </div>
-          {/* Tags Division */}
-          <div className="my-2">
-            <h4 className="text-normal my-1 font-semibold">Tags</h4>
-            {/* Tags List */}
-            <div className="flex flex-wrap space-x-1 gap-1">
-              <span className="py-1 px-2 rounded font-semibold bg-sky-200 text-sky-700 ">
-                Tag 1
-              </span>
-              <span className="py-1 px-2 rounded font-semibold bg-pink-200 text-pink-700 ">
-                Tag 2
-              </span>
-              <span className="py-1 px-2 rounded font-semibold bg-slate-200 text-slate-700 ">
-                + Add Tag{" "}
-              </span>
-            </div>
-          </div>
         </div>
         <div className="">
-          {isAuth ? (
-            // Uesr Name
-            <div className="flex justify-start items-center space-x-1 border px-2 py-1 rounded-full m-2">
-              <div className="rounded-full flex justify-center items-center font-sans font-semibold text-slate-600 w-[35px] aspect-square bg-green-300 text-green-60">
-                ARs
-              </div>
-              <div className="cursor-pointer flex justify-center text-slate-400 hover:text-slate-600 items-start space-x-2">
-                <p className="text-[16px]">Sign out</p>{" "}
-                <LogoutOutlined className="text-lg" />
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col justify-center space-y-1 items-center">
-              <div
-                className="cursor-pointer w-[70%] select-none px-4"
-                onClick={() => setShow(true)}
-              >
-                <p className="text-center text-lg shadow hover:shadow-md active:shadow-sm text-slate-800 border rounded-md py-2 hover bg-slate-50 hover:bg-slate-200">
-                  Sign In
-                </p>
-              </div>
-              <NavLink
-                to="/register"
-                className="underline text-sky-700 cursor-pointer"
-              >
-                Regester Now
-              </NavLink>
-            </div>
-          )}
+          {/* // Uesr Name */}
+          <div
+            className="cursor-pointer flex justify-center text-slate-400 border py-1 hover:bg-slate-100 hover:text-slate-600 items-start space-x-2"
+            onClick={() => signOut()}
+          >
+            <p className="text-[16px]">Sign out</p>{" "}
+            <LogoutOutlined className="text-lg" />
+          </div>
         </div>
       </nav>
     </>
@@ -113,6 +165,7 @@ const List = ({ tit, list }) => {
               <li
                 key={i}
                 className="w-full flex items-center space-x-2 p-1 hover:bg-slate-100 rounded-md cursor-pointer hover:text-slate-800 text-slate-400"
+                onClick={ele.fun}
               >
                 <div className="mb-2">{ele.icon}</div>
                 <div>

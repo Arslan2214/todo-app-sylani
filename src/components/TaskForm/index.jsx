@@ -3,25 +3,30 @@ import { Input, Form, DatePicker } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { collection, addDoc } from "firebase/firestore";
 
+let todos = [] || localStorage.getItem("todo");
+
 const Index = ({ show, setShow }) => {
   const initial_todo = {
     title: "",
     todo_date: "",
     text: "",
+    todo_Id: ()=> new Date().getTime().toString(),
   };
   const [todo, setTodo] = useState(initial_todo);
 
   const handelChange = (e) => {
     // console.log(e.target  )
     const { name, value } = e.target;
-    console.log('name =>', name )
-    console.log('value =>', value )
-    setTodo({ ...todo, [name]: value });  
+    console.log("name =>", name);
+    console.log("value =>", value);
+    setTodo({ ...todo, [name]: value });
   };
 
   const addTodo = async () => {
     // e.preventDefault();
     console.log(todo);
+    todos.push(todo);
+    localStorage.setItem("todo", JSON.stringify(todos));
 
     // try {
     //   const docRef = await addDoc(collection(db, "users"), {
@@ -33,6 +38,8 @@ const Index = ({ show, setShow }) => {
     // } catch (e) {
     //   console.error("Error adding document: ", e);
     // }
+    setTodo(initial_todo)
+    setShow(false);
   };
   // setShow(true);
   return (
@@ -61,20 +68,17 @@ const Index = ({ show, setShow }) => {
             />
           </div>
           <div className="w-full">
-
-            <label
-              className="text-mono text-semibold "
-              >
+            <label className="text-mono text-semibold ">
               Task Completion Date
-              </label>
-              <input
+            </label>
+            <input
               className="border px-2 py-1 rounded-md focus:outline outline-sky-300"
               type="date"
-                name="todo_date"
-                onChange={handelChange}
-                value={todo.todo_date}
-                placeholder="Select Date"
-              />
+              name="todo_date"
+              onChange={handelChange}
+              value={todo.todo_date}
+              placeholder="Select Date"
+            />
           </div>
         </div>
         <div className="text-center my-3">
