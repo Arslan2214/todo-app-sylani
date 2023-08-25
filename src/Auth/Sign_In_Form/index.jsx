@@ -85,7 +85,7 @@ function Index() {
   return (
     <div className="flex justify-center items-center pt-[25px] w-screen h-screen">
       <div
-        className={`relative w-[25%] min-w-[230px] h-[39vh] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
+        className={`relative w-[25%] min-w-[230px] h-[42vh] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
       >
         {/* End Of Close Button */}
         <div>

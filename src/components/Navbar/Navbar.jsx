@@ -1,4 +1,5 @@
 import {
+  CloseOutlined,
   DoubleRightOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
@@ -8,7 +9,7 @@ import {
 import React, { useContext } from "react";
 import { AuthContext } from "../../App";
 
-function Navbar({ setTodos }) {
+function Navbar({ setTodos, setShowMenu }) {
   const [isAuth, setIsAuth] = useContext(AuthContext);
   // Task List
   const list1 = [
@@ -133,14 +134,18 @@ function Navbar({ setTodos }) {
     setTodos(newTodos);
   };
 
-
   return (
     <>
       <nav className="flex flex-col justify-between pt-3 px-2 m-1 bg-slate-100/40 h-[98vh] rounded-lg">
         <div>
           <div>
-            <div>
+            <div className="flex justify-between items-center">
               <p className="text-xl font-semibold">Menu</p>
+              <div 
+              onClick={() => setShowMenu(false)}
+              className="block sm:hidden px-2 text-lg mb-2 cursor-pointer">
+                <CloseOutlined />
+              </div>
             </div>
             {/* Search Bar */}
             <div className="flex justify-center items-center w-full bg-white px-2 rounded-lg my-2">

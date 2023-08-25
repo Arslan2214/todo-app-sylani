@@ -1,0 +1,4 @@
+.trans {
+    transition: all;
+    transition-duration: 800ms;
+}

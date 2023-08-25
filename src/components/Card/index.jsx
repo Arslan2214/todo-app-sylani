@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import React, {  useRef, useState } from "react";
+import { EditOutlined, DeleteOutlined, EllipsisOutlined } from "@ant-design/icons";
 // import { setShow } from "../TaskForm/index";
 
 // Card Component
-function Index({ head, text, date }) {
+function Index({ head, text, date, setTodos }) {
   const [openMenu, setOpenMenu] = useState(false);
   const menu = useRef(null)
 
@@ -33,25 +33,20 @@ function Index({ head, text, date }) {
         >
           {/* Menu Buttons */}
           <div
-            className="hidden absolute top-3 right-3 cursor-pointer group-hover:flex items-start justify-center"
+            className="hidden absolute text-4xl -top-1 right-2 cursor-pointer group-hover:flex items-start justify-center"
             onClick={() => {
               setOpenMenu(true);
             }}
           >
-            <div className="w-[1px] mx-[1.5px] h-[1px] rounded-full shadow-lg p-[3px] bg-slate-500/70">
-              {" "}
-            </div>
-            <div className="w-[1px] mx-[1.5px] h-[1px] rounded-full shadow-lg p-[3px] bg-slate-500/70">
-              {" "}
-            </div>
-            <div className="w-[1px] mx-[1.5px] h-[1px] rounded-full shadow-lg p-[3px] bg-slate-500/70">
-              {" "}
-            </div>
+            <EllipsisOutlined />
           </div>
           {/* Menu Text */}
 
           {openMenu && (
-            <div ref={menu} className="absolute top-3 right-2 rounded-md bg-slate-50 w-[120px]">
+            <div
+              ref={menu}
+              className="absolute top-3 right-2 rounded-md bg-slate-50 w-[120px]"
+            >
               <ul>
                 <li
                   className="flex space-x-2 items-center text-slate-400 px-2 py-1 w-full h-[50%] cursor-pointer hover:text-slate-600 hover:rounded-t-md"
@@ -83,7 +78,12 @@ function Index({ head, text, date }) {
             <p className="text-justify text-[16px] text-gray-400">{text}</p>
           </div>
           <div>
-            <span className="flex justify-end items-center mt-2 text-gray-400 text-[12px]"><span className="mr-1 text-gray-600 font-semibold">Due Date: </span>{date}</span>
+            <span className="flex justify-end items-center mt-2 text-gray-400 text-[12px]">
+              <span className="mr-1 text-gray-600 font-semibold">
+                Due Date:{" "}
+              </span>
+              {date}
+            </span>
           </div>
         </div>
       )}
