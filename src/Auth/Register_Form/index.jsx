@@ -86,7 +86,6 @@ function Index() {
       .then((userCredential) => {
         // Signed Up
         const user = userCredential.user;
-        console.log(user);
         Toast({
           type: "success",
           content: "New User Added, Successfully",

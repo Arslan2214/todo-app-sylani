@@ -7,14 +7,17 @@ import {
 } from "@ant-design/icons";
 import { Toast } from "../../Global/Tostify";
 import { db } from "../../Global/Firebase";
-// import { setShow } from "../TaskForm/index";
+import { LoadContext } from "../../App";
 
 // Card Component
 function Index({ head, text, date, setTodos, todos, bg, todo_Id }) {
   const [openMenu, setOpenMenu] = useState(false);
   const menu = useRef(null);
+  const [isLoading, setIsLoading] = useContext(LoadContext);
 
   const deleteTodo = async () => {
+    setIsLoading(true);
+    
     try {
       await deleteDoc(doc(db, "todo", todo_Id));
       
@@ -29,7 +32,7 @@ function Index({ head, text, date, setTodos, todos, bg, todo_Id }) {
         content: 'Error During, Deletion'
       })  
     }
-
+    setIsLoading(false);
   };
 
   const editTodo = () => {

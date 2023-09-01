@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
 import { Input } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { UserId } from "../../App";
 import { db } from "../../Global/Firebase";
 import { Toast } from "../../Global/Tostify";
+import { useSpring, animated } from "react-spring";
+import { LoadContext } from "../../App";
 
 const Index = ({ show, setShow }) => {
+  const [isLoading, setIsLoading] = useContext(LoadContext);
   const [userId] = useContext(UserId);
   const date = new Date();
   const initial_todo = {
@@ -35,15 +38,15 @@ const Index = ({ show, setShow }) => {
     setTodo({ ...todo, [name]: value });
   };
 
-  const addTodo = async () => {
-    // let todos = JSON.parse(localStorage.getItem("todo")) || [];
-    // e.preventDefault();
-    // todos.push(todo);
-    // localStorage.setItem("todo", JSON.stringify(todos));
-    // console.log(todo);
+  const AddTaskAnimation = useSpring({
+    marginTop: show ? 0 : -100,
+    display: show ? "block" : "none",
+  });
 
+  const addTodo = async () => {
+    setIsLoading(true);
     try {
-     await setDoc(doc(db, "todo",todo.todo_Id), todo);
+      await setDoc(doc(db, "todo", todo.todo_Id), todo);
 
       setTodo(initial_todo);
       Toast({
@@ -59,13 +62,14 @@ const Index = ({ show, setShow }) => {
         content: "Error, During Todo-Adding",
       });
     }
+    setIsLoading(false);
   };
   // setShow(true);
   return (
     // <div className=" inset-0 flex justify-center items-center z-10">
-    <dialog
+    <animated.dialog
+      style={AddTaskAnimation}
       className={`fixed p-2 
-        ${show ? "block" : "hidden"}
          sm:p-5 lg:p-8 text-center h-[60vh] lg:h-[55vh] bg-gray-50 border rounded-xl z-10 min-w-[250px] w-[30%]`}
     >
       {/* Close Button */}
@@ -118,7 +122,7 @@ const Index = ({ show, setShow }) => {
           Add Task
         </button>
       </div>
-    </dialog>
+    </animated.dialog>
     // </div>
   );
 };

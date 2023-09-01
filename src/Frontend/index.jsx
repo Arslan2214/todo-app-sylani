@@ -3,14 +3,15 @@ import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
 import { Layout, theme } from "antd";
-// import Register_Form from '../Auth/Register_Form'
+import Loader from '../components/Loader'
 import Navbar from "../components/Navbar/Navbar";
 import { MenuOutlined, PlusOutlined } from "@ant-design/icons";
 import Sign_In_Form from "../Auth/Sign_In_Form";
 import { ToastContainer } from "react-toastify";
 import { collection, getDocs } from "firebase/firestore"; // Import Firebase-Data
 import { db } from "../Global/Firebase";
-import { TodosContext } from "../App";
+import { TodosContext, UserId, LoadContext } from "../App";
+
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
@@ -19,7 +20,10 @@ const { Header, Content, Footer, Sider } = Layout;
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [todos, setTodos] = useContext(TodosContext);
+  const [isLoading, setIsLoading] = useContext(LoadContext);
+  const [userId] = useContext(UserId);
   const [firebaseTodos, setFirebaseTodos] = useState([]);
+  const [firebaseData, setFirebaseData] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const {
@@ -29,7 +33,7 @@ const App = () => {
   const getData = async () => {
     const firebase_data = await getDocs(collection(db, "todo"));
 
-    setFirebaseTodos(
+    setFirebaseData(
       firebase_data.docs.map((todo) => {
         return {
           todo_Id:
@@ -44,13 +48,20 @@ const App = () => {
         };
       })
     );
-    // console.log(todos.map((todo) => todo._document.data.value.mapValue.fields));    
-    setTodos(firebaseTodos)
+
+    // console.log(todos.map((todo) => todo._document.data.value.mapValue.fields));  
+    console.log(userId)  
+    setFirebaseTodos(firebaseData.filter((ele) => ele.user_Id === userId && ele ));
+    setTodos(firebaseTodos);
   };
-  useEffect(() => {
-    getData();
-    // },[getData]);
-  }, []);
+    useEffect(() => {
+      getData(); 
+    }); 
+
+    // useEffect(() => {
+    //   setFirebaseTodos(firebaseData.filter((ele) => ele.user_Id === userId && ele ));
+    //   setTodos(firebaseTodos);
+    // }, [firebaseData]);
 
   return (
     <Layout hasSider>
@@ -134,6 +145,8 @@ const App = () => {
             </div>
             {/* Endong of Button */}
           </div>
+          
+            {isLoading && <Loader />}  {/* Loader */}
           {/* Toast Container */}
           <ToastContainer />
         </Content>
