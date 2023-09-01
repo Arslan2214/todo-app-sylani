@@ -1,6 +1,6 @@
 import { Input, Space } from "antd";
 import React, { useRef, useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../Global/Firebase";
 import { Toast, ToastContainer } from "../../Global/Tostify";
@@ -84,7 +84,7 @@ function Index() {
     // Firebase User Registeration
     createUserWithEmailAndPassword(auth, user.email, user.password)
       .then((userCredential) => {
-        // Signed in
+        // Signed Up
         const user = userCredential.user;
         console.log(user);
         Toast({
@@ -95,13 +95,13 @@ function Index() {
       })
       .catch((error) => {
         console.log(error.code);
+        console.log(error.message);
         Toast({
           type: "error",
-          content: error.message,
-        })
+          content: "Error, During Sign-Up",
+        });
         // ..
       });
-
 
     setUser(Initial);
   };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import React from "react";
 import Card from "../components/Card";
 import TaskForm from "../components/TaskForm";
@@ -8,6 +8,9 @@ import Navbar from "../components/Navbar/Navbar";
 import { MenuOutlined, PlusOutlined } from "@ant-design/icons";
 import Sign_In_Form from "../Auth/Sign_In_Form";
 import { ToastContainer } from "react-toastify";
+import { collection, getDocs } from "firebase/firestore"; // Import Firebase-Data
+import { db } from "../Global/Firebase";
+import { TodosContext } from "../App";
 
 // Some Constens
 const { Header, Content, Footer, Sider } = Layout;
@@ -15,21 +18,39 @@ const { Header, Content, Footer, Sider } = Layout;
 // Starting Main body of App
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useContext(TodosContext);
+  const [firebaseTodos, setFirebaseTodos] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const getData = async () => {
+    const firebase_data = await getDocs(collection(db, "todo"));
+
+    setFirebaseTodos(
+      firebase_data.docs.map((todo) => {
+        return {
+          todo_Id:
+            todo._document.data.value.mapValue.fields.todo_Id.stringValue,
+          bg: todo._document.data.value.mapValue.fields.bg.stringValue,
+          title: todo._document.data.value.mapValue.fields.title.stringValue,
+          user_Id:
+            todo._document.data.value.mapValue.fields.user_Id.stringValue,
+          text: todo._document.data.value.mapValue.fields.text.stringValue,
+          todo_date:
+            todo._document.data.value.mapValue.fields.todo_date.stringValue,
+        };
+      })
+    );
+    // console.log(todos.map((todo) => todo._document.data.value.mapValue.fields));    
+    setTodos(firebaseTodos)
+  };
   useEffect(() => {
-    if (localStorage.getItem("todo")) {
-      setTodos(JSON.parse(localStorage.getItem("todo")));
-      console.log("If is Running");
-    }
-    console.log("useEffect is Running ...");
-    console.log("Todos =>", localStorage.getItem("todo"));
-  }, [localStorage.getItem("todo")]);
+    getData();
+    // },[getData]);
+  }, []);
 
   return (
     <Layout hasSider>
@@ -39,14 +60,15 @@ const App = () => {
           position: "fixed",
           background: colorBgContainer,
         }}
-        className={`z-50 -left-[${
-          showMenu ? "0" : "200px"
-        }] sm:left-0 w-[200px] trans h-screen md:block shadow-sm`}
+        className={`z-50
+        ${showMenu ? "left-[0]" : "-left-[200px]"}
+          md:left-0  w-[200px] trans h-screen md:block shadow-sm`}
       >
         <Navbar
-          setShow={setShowSignIn}
           setShowMenu={setShowMenu}
           setTodos={setTodos}
+          todos={todos}
+          firebaseTodos={firebaseTodos}
         />
       </Sider>
 
@@ -72,13 +94,27 @@ const App = () => {
             <TaskForm show={showAddTask} setShow={setShowAddTask} />
             {
               // Data from Firebase
-              todos.map((todo) => {
+              todos?.map((todo, i) => {
                 return (
                   <Card
+                    key={i}
+                    todo_Id={
+                      todo.todo_Id
+                    }
+                    head={
+                      todo.title
+                    }
+                    text={
+                      todo.text
+                    }
+                    date={
+                      todo.todo_date
+                    }
+                    bg={
+                      todo.bg
+                    }
                     setTodos={setTodos}
-                    head={todo.title}
-                    text={todo.text}
-                    date={todo.todo_date}
+                    todos={todos}
                   />
                 );
               })

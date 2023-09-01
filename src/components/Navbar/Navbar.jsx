@@ -9,9 +9,98 @@ import {
 import React, { useContext } from "react";
 import { AuthContext } from "../../App";
 
-function Navbar({ setTodos, setShowMenu }) {
+function Navbar({ setShowMenu, setTodos, firebaseTodos, todos }) {
   const [isAuth, setIsAuth] = useContext(AuthContext);
-  // Task List
+
+  // --------------------- Counts -------------------
+  const upcomingTodosCount = () => {
+    return todos.filter((todo) => {
+      const todo_time = new Date(todo.todo_date).getTime();
+      if (todo_time > new Date().getTime()) {
+        return todo;
+      }
+    }).length;
+  };
+  // console.log(todos)
+
+  const todayTodosCount = () => {
+    const currentDate = new Date();
+    const todayTodos = todos.filter((ele) => {
+      const todoDate = new Date(ele.todo_date);
+      return (
+        todoDate.getFullYear() === currentDate.getFullYear() &&
+        todoDate.getMonth() === currentDate.getMonth() &&
+        todoDate.getDate() === currentDate.getDate()
+      );
+    });
+    return todayTodos?.length;
+  };
+  // console.log(todos.map(todo => todo._document.data.value.mapValue.fields));
+
+  // ------------------- Filters ----------------------
+  // Upcoming Todos ------------
+  const UpcomingTodos = () => {
+    const currentDate = new Date();
+    const upcomingTodos = firebaseTodos.filter((ele) => {
+      const todoDate = new Date(
+        ele.todo_date
+      );
+      return (
+        todoDate.getTime() > currentDate.getTime() 
+      );
+    });
+    setTodos(upcomingTodos);
+  };
+
+  // Today's Todos ------------
+  const todaytodos = () => {
+    const currentDate = new Date();
+    const todayTodos = firebaseTodos.filter((ele) => {
+      const todoDate = new Date(
+        ele.todo_date
+      );
+      return (
+        todoDate.getFullYear() === currentDate.getFullYear() &&
+        todoDate.getMonth() === currentDate.getMonth() &&
+        todoDate.getDate() === currentDate.getDate()
+      );
+    });
+    setTodos(todayTodos);
+  };
+
+  // All Todos ----------
+  const fullTodosList = () => {
+    setTodos(firebaseTodos);
+  };
+  const signOut = () => {
+    setIsAuth(false);
+  };
+
+  // Search Function
+  const handelSearch = (e) => {
+    const inputValue = e.target.value.trim(); // Remove leading and trailing whitespace
+
+    if (inputValue === "") {
+      setTodos(todos);
+      return;
+    }
+
+    const newTodos = todos?.filter((ele) => {
+      // Split input value and todo title into words
+      const inputWords = inputValue.toLowerCase().split(" ");
+      const todoTitleWords = ele.title.toLowerCase().split(" ");
+
+      // Check if any word in todo title matches any word in input value
+      return inputWords.some((inputWord) =>
+        todoTitleWords.some((todoTitleWord) =>
+          todoTitleWord.includes(inputWord)
+        )
+      );
+    });
+
+    setTodos(newTodos);
+  };
+  // Menu List
   const list1 = [
     {
       text: "Upcoming",
@@ -30,29 +119,6 @@ function Navbar({ setTodos, setShowMenu }) {
     },
   ];
 
-  const upcomingTodosCount = () => {
-    return JSON.parse(localStorage.getItem("todo")).filter((ele) => {
-      if (new Date(ele.todo_date).getTime() > new Date().getTime()) {
-        return ele;
-      }
-    }).length;
-  };
-  const todayTodosCount = () => {
-    const todos = JSON.parse(localStorage.getItem("todo")) || []; // Handle possible null value
-    const currentDate = new Date();
-
-    const todayTodos = todos.filter((ele) => {
-      const todoDate = new Date(ele.todo_date);
-      return (
-        todoDate.getFullYear() === currentDate.getFullYear() &&
-        todoDate.getMonth() === currentDate.getMonth() &&
-        todoDate.getDate() === currentDate.getDate()
-      );
-    });
-
-    return todayTodos.length;
-  };
-
   // Collection List
   const collect = [
     {
@@ -63,76 +129,10 @@ function Navbar({ setTodos, setShowMenu }) {
     { text: "Today", ntf: todayTodosCount() || 0, clr: "#67e8f9" },
     {
       text: "Todo List",
-      ntf: JSON.parse(localStorage.getItem("todo")).length || 0,
+      ntf: todos.length || 0,
       clr: "#fda4af",
     },
   ];
-
-  // Upcoming Todos
-  const UpcomingTodos = () => {
-    const todos = JSON.parse(localStorage.getItem("todo"));
-    const currentDate = new Date().getTime();
-
-    const newTodos = todos.filter((ele) => {
-      const todo_date = new Date(ele.todo_date).getTime();
-      if (todo_date > currentDate) {
-        return ele;
-      }
-    });
-    setTodos(newTodos);
-  };
-
-  // Today's Todos
-  const todaytodos = () => {
-    const todos = JSON.parse(localStorage.getItem("todo")) || []; // Handle possible null value
-    const currentDate = new Date();
-
-    const todayTodos = todos.filter((ele) => {
-      const todoDate = new Date(ele.todo_date);
-      return (
-        todoDate.getFullYear() === currentDate.getFullYear() &&
-        todoDate.getMonth() === currentDate.getMonth() &&
-        todoDate.getDate() === currentDate.getDate()
-      );
-    });
-
-    setTodos(todayTodos);
-  };
-
-  // All Todos
-  const fullTodosList = () => {
-    setTodos(JSON.parse(localStorage.getItem("todo")));
-  };
-  const signOut = () => {
-    setIsAuth(false);
-  };
-
-  // Search Function
-  const handelChange = (e) => {
-    const inputValue = e.target.value.trim(); // Remove leading and trailing whitespace
-
-    if (inputValue === "") {
-      setTodos(JSON.parse(localStorage.getItem("todo")));
-      return;
-    }
-
-    const todos = JSON.parse(localStorage.getItem("todo"));
-
-    const newTodos = todos.filter((ele) => {
-      // Split input value and todo title into words
-      const inputWords = inputValue.toLowerCase().split(" ");
-      const todoTitleWords = ele.title.toLowerCase().split(" ");
-
-      // Check if any word in todo title matches any word in input value
-      return inputWords.some((inputWord) =>
-        todoTitleWords.some((todoTitleWord) =>
-          todoTitleWord.includes(inputWord)
-        )
-      );
-    });
-
-    setTodos(newTodos);
-  };
 
   return (
     <>
@@ -141,9 +141,10 @@ function Navbar({ setTodos, setShowMenu }) {
           <div>
             <div className="flex justify-between items-center">
               <p className="text-xl font-semibold">Menu</p>
-              <div 
-              onClick={() => setShowMenu(false)}
-              className="block sm:hidden px-2 text-lg mb-2 cursor-pointer">
+              <div
+                onClick={() => setShowMenu(false)}
+                className="block md:hidden px-2 text-lg mb-2 cursor-pointer"
+              >
                 <CloseOutlined />
               </div>
             </div>
@@ -154,7 +155,7 @@ function Navbar({ setTodos, setShowMenu }) {
               </span>
               <input
                 type="text"
-                onChange={handelChange}
+                onChange={(e) => handelSearch(e)}
                 placeholder="Search"
                 className="w-full p-2 bg-transparent rounded-md outline-none border-none border-r-2 border-t-2 border-b-2"
               />

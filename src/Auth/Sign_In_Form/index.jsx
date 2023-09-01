@@ -6,14 +6,15 @@ import { Toast } from "../../Global/Tostify";
 import { AuthContext } from "../../App";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "../../Global/Tostify";
+import { UserId } from "../../App";
 
 function Index() {
+  const [userId, setUserId] = useContext(UserId);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const email = useRef(null);
   const password = useRef(null);
 
   const [isAuth, setIsAuth] = useContext(AuthContext);
-  console.log(isAuth);
 
   const Initial = {
     email: "",
@@ -25,7 +26,8 @@ function Index() {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // All Fields Empty
     if (user.email.length < 1 && user.password.length < 1) {
@@ -58,34 +60,39 @@ function Index() {
       return;
     }
 
-    Toast({
-      type: "success",
-      content: "Sign In, Successfully",
-    });
-    console.log(user);
-
-    // Firebase Sign-In
-    signInWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password
+      );
+      const currentUser = userCredential.user;
+      setUserId(currentUser.uid);
+      
+      Toast({
+        type: "success",
+        content: "Sign-in, Successfully",
       });
-    setIsAuth(true);
+
+      setIsAuth(true);
+      setUser(Initial);
+    } catch (error) {
+      console.log(error.code);
+      console.log(error.message);
+      Toast({
+        type: "error",
+        content: "Error, During Sign-In",
+      });
+    }
+
     // Reset Input Field
-    setUser(Initial);
   };
   // navigate to '/'
 
   return (
     <div className="flex justify-center items-center pt-[25px] w-screen h-screen">
       <div
-        className={`relative w-[25%] min-w-[230px] h-[42vh] text-center z-30 rounded-md shadow-md py-6 px-3 bg-slate-100 `}
+        className={`relative w-[25%] min-w-[230px] h-[48vh] text-center z-30 rounded-md shadow-lg py-6 px-3 bg-slate-100 `}
       >
         {/* End Of Close Button */}
         <div>
@@ -115,10 +122,10 @@ function Index() {
           />
         </div>
         <div>
-          <p className="select-none">
+          <p className="text-sm md:text-md text-slate-600 text-center select-none">
             Don't have an account?{" "}
             <Link
-              className="text-sky-500 hover:underline cursor-pointer"
+              className="text-sky-500 hover:underline text-semibold cursor-pointer"
               to="/register"
             >
               Register Now
